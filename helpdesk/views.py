@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator
 from django.db import models
 from django.shortcuts import render, redirect, get_object_or_404
 from accesscontrol.decorators import role_required
@@ -27,10 +28,12 @@ def ticket_create(request):
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.created_by = request.user
+            ticket.branch = request.user.userprofile.branch  # Auto-assign branch
             ticket.save()
             return redirect('dashboard')
     else:
         form = TicketForm()
+
     return render(request, 'helpdesk/ticket_form.html', {'form': form})
 
 
@@ -74,12 +77,14 @@ def ticket_detail(request, pk):
 def dashboard(request):
     context = {}
 
+    archived_qs = None
+
     if is_employee(request.user):
         context['my_tickets'] = Ticket.objects.filter(
             created_by=request.user
         ).exclude(status__in=['closed', 'resolved'])
 
-        context['archived_my_tickets'] = Ticket.objects.filter(
+        archived_qs = Ticket.objects.filter(
             created_by=request.user,
             status__in=['closed', 'resolved']
         )
@@ -89,10 +94,16 @@ def dashboard(request):
             assigned_to=request.user
         ).exclude(status__in=['closed', 'resolved'])
 
-        context['archived_my_tickets'] = Ticket.objects.filter(
+        archived_qs = Ticket.objects.filter(
             models.Q(assigned_to=request.user) | models.Q(created_by=request.user),
             status__in=['closed', 'resolved']
         ).distinct()
+
+    if archived_qs is not None:
+        paginator = Paginator(archived_qs.order_by('-updated_at'), 10)
+        page_number = request.GET.get('page')
+        archived_page = paginator.get_page(page_number)
+        context['archived_my_tickets'] = archived_page
 
     context['unassigned_tickets'] = Ticket.objects.filter(
         assigned_to__isnull=True,
@@ -113,6 +124,7 @@ def dashboard(request):
         }
 
     return render(request, 'helpdesk/dashboard.html', context)
+
 
 def no_access(request):
     return render(request, 'helpdesk/no_access.html')

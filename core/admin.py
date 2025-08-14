@@ -4,6 +4,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
+from core.forms import UserProfileInlineForm
+from core.models import UserProfile, Branch, Department, Role
+
+
 class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
@@ -23,6 +27,13 @@ class CustomUserChangeForm(UserChangeForm):
             raise forms.ValidationError("Both first and last name are required.")
         return cleaned_data
 
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    form = UserProfileInlineForm
+    can_delete = False
+    verbose_name_plural = 'Profile'
+    fk_name = 'user'
+
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
@@ -32,6 +43,28 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('username', 'first_name', 'last_name', 'password1', 'password2'),
         }),
     )
+    inlines = (UserProfileInline,)
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
+
+@admin.register(Branch)
+class BranchAdmin(admin.ModelAdmin):
+    list_display = ('location_number', 'name')
+    search_fields = ('location_number', 'name')
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'branch')
+    search_fields = ('user__username', 'user__first_name', 'user__last_name', 'branch__name')
+
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)

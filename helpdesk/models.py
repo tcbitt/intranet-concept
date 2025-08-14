@@ -2,6 +2,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from core.models import Branch
+
+
 class Ticket(models.Model):
     STATUS_CHOICES = [
         ('open', 'Open'),
@@ -17,6 +20,7 @@ class Ticket(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    branch = models.ForeignKey(Branch, on_delete=models.SET_NULL, null=True, blank=True)
 
 class TicketComment(models.Model):
     ticket = models.ForeignKey(Ticket, related_name='comments', on_delete=models.CASCADE)

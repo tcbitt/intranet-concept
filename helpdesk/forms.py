@@ -4,7 +4,7 @@ from .models import Ticket, TicketComment
 class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
-        fields = ['title', 'description', 'assigned_to']
+        fields = ['title', 'description']
         widgets = {
             'title': forms.TextInput(attrs={
                 'placeholder': 'Brief summary of the issue',
@@ -14,9 +14,6 @@ class TicketForm(forms.ModelForm):
                 'placeholder': 'Describe the problem in detail...',
                 'class': 'form-control',
                 'rows': 5
-            }),
-            'assigned_to': forms.Select(attrs={
-                'class': 'form-control'
             }),
         }
 

@@ -9,6 +9,11 @@
 {% block content %}
 <section class="dashboard-section">
     <h2>Helpdesk Dashboard</h2>
+    <div class="dashboard-block">
+        <a href="{% url 'ticket_create' %}" class="btn">
+            + Create New Ticket
+        </a>
+    </div>
     {% if status_counts %}
     <div class="dashboard-block">
         <h3>Ticket Status Summary</h3>
@@ -141,12 +146,6 @@
     </div>
     {% endif %}
 
-    {% if user_management %}
-    <div class="dashboard-block">
-        <a href="/admin/auth/user/" class="button">Manage Users</a>
-    </div>
-    {% endif %}
-
     {% if archived_my_tickets %}
     <div class="dashboard-block">
         <h3>
@@ -174,9 +173,30 @@
                 {% endfor %}
                 </tbody>
             </table>
+
+            {% if archived_my_tickets.has_other_pages %}
+            <div class="pagination">
+                {% if archived_my_tickets.has_previous %}
+                <a href="?page={{ archived_my_tickets.previous_page_number }}">Previous</a>
+                {% endif %}
+
+                {% for num in archived_my_tickets.paginator.page_range %}
+                {% if archived_my_tickets.number == num %}
+                <strong>{{ num }}</strong>
+                {% elif num > archived_my_tickets.number|add:'-3' and num < archived_my_tickets.number|add:'3' %}
+                <a href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+                {% endfor %}
+
+                {% if archived_my_tickets.has_next %}
+                <a href="?page={{ archived_my_tickets.next_page_number }}">Next</a>
+                {% endif %}
+            </div>
+            {% endif %}
         </div>
     </div>
     {% endif %}
+
 </section>
 
 {% block extra_js %}

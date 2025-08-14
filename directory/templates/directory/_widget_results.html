@@ -1,19 +1,20 @@
 <div class="widget-grid">
-    {% for person in page_obj %}
+    {% for profile in page_obj %}
     <div class="widget-card">
         <div class="card-header">
-            <strong>{{ person.name }}</strong>
-            <span>{{ person.title }}</span>
+            <strong>{{ profile.user.get_full_name }}</strong>
         </div>
         <div class="card-body">
-            <p>{{ person.department }}</p>
-            <p><a href="mailto:{{ person.email }}">{{ person.email }}</a></p>
-            <p>{{ person.phone }}</p>
+            <p>{{ profile.department.name }}</p>
+            <p>{{ profile.role.name }}</p>
+            <p><a href="mailto:{{ profile.user.email }}">{{ profile.user.email }}</a></p>
+            <p>{{ profile.phone }}</p>
         </div>
     </div>
     {% empty %}
     <p class="no-results">No matches found.</p>
     {% endfor %}
+
 </div>
 
 <div class="pagination">
