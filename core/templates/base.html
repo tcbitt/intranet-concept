@@ -11,18 +11,18 @@
 <body>
 <header class="navbar">
     <div class="logo-container">
-        <a href="{% url 'home' %}">
+        <a href="{% url 'core:home' %}">
             <img src="{% static 'images/logo.png' %}" alt="IrrNET Logo" class="logo">
         </a>
     </div>
     <div class="login-buttons">
         {% if user.is_authenticated %}
-        <form method="post" action="{% url 'logout' %}">
+        <form method="post" action="{% url 'core:logout' %}">
             {% csrf_token %}
             <button type="submit" class="btn">Log Out</button>
         </form>
         {% else %}
-        <a href="{% url 'login' %}" class="btn">
+        <a href="{% url 'core:login' %}" class="btn">
             <span>Log In</span>
         </a>
         {% endif %}
@@ -41,9 +41,11 @@
             <span class="email-label">Email</span>
         </a>
     </div>
+    <!--
     <div class="title-container">
         <h1 class="site-title">IrrNET</h1>
     </div>
+    -->
 </header>
 <div class="layout">
     <aside class="sidebar">
@@ -56,8 +58,11 @@
     </aside>
 
     <main class="content">
-        {% block breadcrumbs %}
-        {% endblock %}
+        {% load breadcrumb_tags %}
+        {% get_breadcrumbs as breadcrumbs %}
+        {% if breadcrumbs %}
+        {% include 'components/breadcrumbs.html' %}
+        {% endif %}
         {% block content %}
         {% endblock %}
     </main>
@@ -65,29 +70,37 @@
 <a href="http://irrsupply.com" target="_blank" class="popout-button">
     To Our Website! ↪
 </a>
-{% block extra_js %}{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/breadcrumb-orb.js' %}"></script>
+{% endblock %}
 </body>
 <footer class="site-footer">
-  <div class="footer-content">
-    <div class="footer-section">
-      <h4><a href="http://189.189.1.237/mediawiki/index.php/Central_Office_Phone_Extensions" target="_blank">North Tonawanda Office</a></h4>
-        <p>908 Niagara Falls Boulevard</p>
-        <p>North Tonawanda, NY 14120</p>
-        <p>Phone: (716) 692-1600</p>
-        <p>Fax Bldg 1: (716) 692-1611</p>
-        <p>Fax Bldg 2: (716) 692-0232</p>
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4><a href="http://189.189.1.237/mediawiki/index.php/Central_Office_Phone_Extensions" target="_blank">North
+                Tonawanda Office</a></h4>
+            <p>908 Niagara Falls Boulevard</p>
+            <p>North Tonawanda, NY 14120</p>
+            <p>Phone: (716) 692-1600</p>
+            <p>Fax Bldg 1: (716) 692-1611</p>
+            <p>Fax Bldg 2: (716) 692-0232</p>
+        </div>
+        <div class="footer-section">
+            <img src="{% static 'images/logo.png' %}" alt="Footer Image 1" class="footer-image">
+            <img src="{% static 'images/visionary-showroom-white.svg' %}" alt="Footer Image 2" class="footer-image">
+        </div>
+        <div class="footer-section">
+            <h4><a href="http://irrwiki/mediawiki/index.php/VoIP_Phone_Extensions#41_Binghamton" target="_blank">Binghamton
+                Office</a></h4>
+            <p>59 Chenango Bridge Road</p>
+            <p>Binghamton, NY 13901</p>
+            <p>Phone: (607) 772-8800</p>
+            <p>Fax: (607) 772-1339</p>
+        </div>
     </div>
-    <div class="footer-section">
-        <h4><a href="http://irrwiki/mediawiki/index.php/VoIP_Phone_Extensions#41_Binghamton" target="_blank">Binghamton Office</a></h4>
-      <p>59 Chenango Bridge Road</p>
-      <p>Binghamton, NY 13901</p>
-      <p>Phone: (607) 772-8800</p>
-      <p>Fax: (607) 772-1339</p>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Irr Supply Centers, Inc. All rights reserved.</p>
     </div>
-  </div>
-  <div class="footer-bottom">
-    <p>&copy; 2025 Irr Supply Centers, Inc. All rights reserved.</p>
-  </div>
 </footer>
 
 </html>

@@ -7,7 +7,7 @@
 {% block title %}Ticket Details{% endblock %}
 
 {% block content %}
-<div class="directory-widget">
+<div class="widget">
     <a href="{% url 'dashboard' %}" class="btn btn-sm back-button">← Back to Dashboard</a>
     <h2>{{ ticket.title }}</h2>
     <p><strong>Status:</strong> {{ ticket.status|capfirst }}</p>

@@ -9,142 +9,28 @@
 {% block content %}
 <section class="dashboard-section">
     <h2>Helpdesk Dashboard</h2>
+
     <div class="dashboard-block">
-        <a href="{% url 'ticket_create' %}" class="btn">
-            + Create New Ticket
-        </a>
+        <a href="{% url 'ticket_create' %}" class="btn">Create New Ticket</a>
     </div>
-    {% if status_counts %}
+
+    {% if status_counts_display %}
     <div class="dashboard-block">
         <h3>Ticket Status Summary</h3>
         <div class="status-summary">
-            {% for status, count in status_counts.items %}
-            <div class="status-card status-{{ status }}">
-                <span class="status-label">{{ status|title }}</span>
-                <span class="status-count">{{ count }}</span>
+            {% for status in status_counts_display %}
+            <div class="status-card status-{{ status.code }}">
+                <span class="status-label">{{ status.label }}</span>
+                <span class="status-count">{{ status.count }}</span>
             </div>
             {% endfor %}
         </div>
     </div>
     {% endif %}
 
-    {% if my_tickets %}
-    <div class="dashboard-block">
-        <h3>Tickets Assigned to Me</h3>
-        <table class="ticket-table">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Subject</th>
-                <th>Submitted By</th>
-                <th>Assigned To</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Last Comment</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for ticket in my_tickets %}
-            <tr onclick="window.location.href='{% url 'ticket_detail' ticket.pk %}'">
-                <td>#{{ ticket.pk }}</td>
-                <td>{{ ticket.title }}</td>
-                <td>{{ ticket.created_by.get_full_name|default:ticket.created_by.username }}</td>
-                <td>{{ ticket.assigned_to.get_full_name|default:"Unassigned" }}</td>
-                <td>{{ ticket.status|capfirst }}</td>
-                <td>{{ ticket.created_at|date:"M d, Y" }}</td>
-                <td>
-                    {% with ticket.comments.last as last_comment %}
-                    {% if last_comment %}
-                    {{ last_comment.comment|truncatewords:10 }}
-                    {% else %}
-                    <em>No comments</em>
-                    {% endif %}
-                    {% endwith %}
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% endif %}
-
-    {% if unassigned_tickets %}
-    <div class="dashboard-block">
-        <h3>Unassigned Tickets (Open)</h3>
-        <table class="ticket-table">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Subject</th>
-                <th>Submitted By</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Last Comment</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for ticket in unassigned_tickets %}
-            <tr onclick="window.location.href='{% url 'ticket_detail' ticket.pk %}'">
-                <td>#{{ ticket.pk }}</td>
-                <td>{{ ticket.title }}</td>
-                <td>{{ ticket.created_by.get_full_name|default:ticket.created_by.username }}</td>
-                <td>{{ ticket.status|capfirst }}</td>
-                <td>{{ ticket.created_at|date:"M d, Y" }}</td>
-                <td>
-                    {% with ticket.comments.last as last_comment %}
-                    {% if last_comment %}
-                    {{ last_comment.comment|truncatewords:10 }}
-                    {% else %}
-                    <em>No comments</em>
-                    {% endif %}
-                    {% endwith %}
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% endif %}
-
-    {% if all_tickets %}
-    <div class="dashboard-block">
-        <h3>All Active Tickets</h3>
-        <table class="ticket-table">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Subject</th>
-                <th>Submitted By</th>
-                <th>Assigned To</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Last Comment</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for ticket in all_tickets %}
-            <tr onclick="window.location.href='{% url 'ticket_detail' ticket.pk %}'">
-                <td>#{{ ticket.pk }}</td>
-                <td>{{ ticket.title }}</td>
-                <td>{{ ticket.created_by.get_full_name|default:ticket.created_by.username }}</td>
-                <td>{{ ticket.assigned_to.get_full_name|default:"Unassigned" }}</td>
-                <td>{{ ticket.status|capfirst }}</td>
-                <td>{{ ticket.created_at|date:"M d, Y" }}</td>
-                <td>
-                    {% with ticket.comments.last as last_comment %}
-                    {% if last_comment %}
-                    {{ last_comment.comment|truncatewords:10 }}
-                    {% else %}
-                    <em>No comments</em>
-                    {% endif %}
-                    {% endwith %}
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% endif %}
+    {% include "helpdesk/_ticket_table.html" with tickets=my_tickets title="Tickets Assigned to Me" show_comments=True %}
+    {% include "helpdesk/_ticket_table.html" with tickets=unassigned_tickets title="Unassigned Tickets (Open)" show_comments=True %}
+    {% include "helpdesk/_ticket_table.html" with tickets=all_tickets title="All Active Tickets" show_comments=True %}
 
     {% if archived_my_tickets %}
     <div class="dashboard-block">
@@ -153,26 +39,7 @@
             <button onclick="toggleArchive()" class="btn btn-sm" style="float: right;">Toggle View</button>
         </h3>
         <div id="archived-section" style="display: none;">
-            <table class="ticket-table">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Subject</th>
-                    <th>Status</th>
-                    <th>Closed On</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for ticket in archived_my_tickets %}
-                <tr onclick="window.location.href='{% url 'ticket_detail' ticket.pk %}'">
-                    <td>#{{ ticket.pk }}</td>
-                    <td>{{ ticket.title }}</td>
-                    <td>{{ ticket.status|capfirst }}</td>
-                    <td>{{ ticket.updated_at|date:"M d, Y" }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            {% include "helpdesk/_ticket_table.html" with tickets=archived_my_tickets show_comments=False %}
 
             {% if archived_my_tickets.has_other_pages %}
             <div class="pagination">
@@ -196,7 +63,6 @@
         </div>
     </div>
     {% endif %}
-
 </section>
 
 {% block extra_js %}

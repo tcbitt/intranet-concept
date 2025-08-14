@@ -76,18 +76,7 @@ def ticket_detail(request, pk):
 
 def dashboard(request):
     context = {}
-
     archived_qs = None
-
-    if is_employee(request.user):
-        context['my_tickets'] = Ticket.objects.filter(
-            created_by=request.user
-        ).exclude(status__in=['closed', 'resolved'])
-
-        archived_qs = Ticket.objects.filter(
-            created_by=request.user,
-            status__in=['closed', 'resolved']
-        )
 
     if is_support(request.user) or is_admin(request.user):
         context['my_tickets'] = Ticket.objects.filter(
@@ -99,32 +88,47 @@ def dashboard(request):
             status__in=['closed', 'resolved']
         ).distinct()
 
-    if archived_qs is not None:
-        paginator = Paginator(archived_qs.order_by('-updated_at'), 10)
-        page_number = request.GET.get('page')
-        archived_page = paginator.get_page(page_number)
-        context['archived_my_tickets'] = archived_page
+        context['unassigned_tickets'] = Ticket.objects.filter(
+            assigned_to__isnull=True,
+            status='open'
+        )
 
-    context['unassigned_tickets'] = Ticket.objects.filter(
-        assigned_to__isnull=True,
-        status='open'
-    )
-
-    if is_admin(request.user):
-        context['all_tickets'] = Ticket.objects.exclude(status__in=['closed', 'resolved'])
-        context['archived_all_tickets'] = Ticket.objects.filter(status__in=['closed', 'resolved'])
-        context['user_management'] = True
-
-    if is_support(request.user) or is_admin(request.user):
-        context['status_counts'] = {
+        raw_counts = {
             'open': Ticket.objects.filter(status='open', assigned_to__isnull=True).count(),
             'in_progress': Ticket.objects.filter(status='in_progress').count(),
             'resolved': Ticket.objects.filter(status='resolved').count(),
             'closed': Ticket.objects.filter(status='closed').count(),
         }
 
-    return render(request, 'helpdesk/dashboard.html', context)
+        status_map = dict(Ticket.STATUS_CHOICES)
 
+        context['status_counts_display'] = [
+            {'code': code, 'label': status_map.get(code, code.title()), 'count': count}
+            for code, count in raw_counts.items()
+        ]
+
+        if is_admin(request.user):
+            context['all_tickets'] = Ticket.objects.exclude(status__in=['closed', 'resolved'])
+            context['archived_all_tickets'] = Ticket.objects.filter(status__in=['closed', 'resolved'])
+            context['user_management'] = True
+
+    elif is_employee(request.user):
+        context['my_tickets'] = Ticket.objects.filter(
+            created_by=request.user
+        ).exclude(status__in=['closed', 'resolved'])
+
+        archived_qs = Ticket.objects.filter(
+            created_by=request.user,
+            status__in=['closed', 'resolved']
+        )
+
+    if archived_qs is not None:
+        paginator = Paginator(archived_qs.order_by('-updated_at'), 10)
+        page_number = request.GET.get('page')
+        archived_page = paginator.get_page(page_number)
+        context['archived_my_tickets'] = archived_page
+
+    return render(request, 'helpdesk/dashboard.html', context)
 
 def no_access(request):
     return render(request, 'helpdesk/no_access.html')

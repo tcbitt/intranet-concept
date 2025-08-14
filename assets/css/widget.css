@@ -1,4 +1,4 @@
-.directory-widget {
+.widget {
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 12px;
@@ -21,7 +21,7 @@
 .widget-header h3 {
     margin: 0;
     font-size: 1.2rem;
-    color: #002259;
+    color: var(--primary-blue);
 }
 
 .widget-header input {
@@ -121,4 +121,33 @@
     background-color: var(--primary-blue);
     color: var(--white);
     border: 1px solid var(--primary-blue);
+}
+
+.widget form {
+    max-width: 100%;
+    width: 100%;
+}
+
+.widget .form-group {
+    margin-bottom: 1rem;
+}
+
+
+.widget .form-group input,
+.widget .form-group textarea,
+.widget .form-group select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.field-error {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
 }

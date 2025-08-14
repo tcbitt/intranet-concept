@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="directory-widget">
+<div class="widget">
     <h2 style="margin-top: 0; color: var(--primary-blue); text-align: center;">Submit a Helpdesk Ticket</h2>
     <form method="post">
         {% csrf_token %}
@@ -17,7 +17,7 @@
             {{ form.title.label_tag }}
             {{ form.title }}
             {% if form.title.errors %}
-                <div class="field-error">{{ form.title.errors }}</div>
+            <div class="field-error">{{ form.title.errors }}</div>
             {% endif %}
         </div>
 
@@ -25,7 +25,7 @@
             {{ form.description.label_tag }}
             {{ form.description }}
             {% if form.description.errors %}
-                <div class="field-error">{{ form.description.errors }}</div>
+            <div class="field-error">{{ form.description.errors }}</div>
             {% endif %}
         </div>
 
@@ -33,9 +33,17 @@
             {{ form.assigned_to.label_tag }}
             {{ form.assigned_to }}
             {% if form.assigned_to.errors %}
-                <div class="field-error">{{ form.assigned_to.errors }}</div>
+            <div class="field-error">{{ form.assigned_to.errors }}</div>
             {% endif %}
         </div>
+
+        <div class="form-group">
+            <label>Branch</label>
+            <input type="text"
+                   value="{{ request.user.userprofile.branch.name }} - {{ request.user.userprofile.branch.location_number }}"
+                   readonly class="readonly-field">
+        </div>
+
 
         <button type="submit" class="btn">Submit Ticket</button>
     </form>
