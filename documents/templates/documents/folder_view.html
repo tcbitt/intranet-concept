@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/docs_widget.css' %}">
+{% endblock %}
+{% block content %}
+<div class="documents-container">
+    <nav class="breadcrumb-nav">
+        <ul class="breadcrumb-list">
+            <li><a href="{% url 'document-list' %}">All Departments</a></li>
+            <li><a href="{% url 'department-overview' %}">{{ department.name }}</a></li>
+            {% if current_folder %}
+            {% for ancestor in current_folder.get_ancestors %}
+            <li><a href="{% url 'folder-view' department.slug ancestor.id %}">{{ ancestor.name }}</a></li>
+            {% endfor %}
+            <li class="active">{{ current_folder.name }}</li>
+            {% endif %}
+        </ul>
+    </nav>
+    <h2>{{ department.name }}{% if current_folder %} / {{ current_folder.name }}{% endif %}</h2>
+    {% if is_manager %}
+    <div class="upload-section">
+        <h3>Upload a Document</h3>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Upload</button>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if subfolders %}
+    <h3>Subfolders</h3>
+    <ul class="folder-list">
+        {% for folder in subfolders %}
+        <li><a href="{% url 'folder-view' department.slug folder.id %}">{{ folder.name }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if documents %}
+    <h3>Documents</h3>
+    <div class="documents-grid">
+        {% for doc in documents %}
+        <div class="document-card">
+            <div class="document-card-body">
+                <h5 class="document-title">{{ doc.title }}</h5>
+                <p class="document-description">{{ doc.description|truncatewords:20 }}</p>
+            </div>
+            <div class="document-card-footer">
+                <small class="document-date">{{ doc.uploaded_at|date:"M d, Y" }}</small>
+                <a href="{% url 'document-detail' doc.id %}" class="btn btn-sm">View</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No documents in this folder.</p>
+    {% endif %}
+</div>
+{% endblock %}

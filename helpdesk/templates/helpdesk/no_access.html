@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Access Denied - IrrNET{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/no_access.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="access-denied-container">
+    <div class="access-denied-card">
+        <div class="icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="60" height="60" fill="#cc0000">
+                <path d="M320 64C185.3 64 74.7 174.7 74.7 309.3C74.7 444 185.3 554.7 320 554.7C454.7 554.7 565.3 444 565.3 309.3C565.3 174.7 454.7 64 320 64zM320 128C356.7 128 384 155.3 384 192C384 228.7 356.7 256 320 256C283.3 256 256 228.7 256 192C256 155.3 283.3 128 320 128zM320 480C273.3 480 232 457.3 208 420C208 380 288 360 320 360C352 360 432 380 432 420C408 457.3 366.7 480 320 480z"/>
+            </svg>
+        </div>
+        <h2>Access Denied</h2>
+        <p>You do not have permission to view this page.</p>
+        <a href="{% url 'home' %}" class="btn return-btn">Return to Home</a>
+    </div>
+</div>
+{% endblock %}

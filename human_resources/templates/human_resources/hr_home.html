@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - IrrNET{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <h2></h2>
+    <p class="intro"></p>
+
+    <section class="quick-links">
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    HR Documents
+                </h3>
+            </div>
+            <p></p>
+            <a href="{% url 'department-documents' 'hr' %}" class="btn">View HR Documents</a>
+        </div>
+    </section>
+</div>
+{% endblock %}

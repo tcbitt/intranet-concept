@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/docs_widget.css' %}">
+{% endblock %}
+{% block content %}
+<div class="documents-container">
+  <h2>Select a Department</h2>
+  <ul class="department-list">
+    {% for dept in departments %}
+      <li><a href="{% url 'folder-view' dept.slug %}">{{ dept.name }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

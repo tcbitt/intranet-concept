@@ -1,0 +1,124 @@
+.directory-widget {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    font-family: 'Segoe UI', sans-serif;
+    margin: 2rem auto;
+    max-width: 960px;
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--light-gray);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.widget-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #002259;
+}
+
+.widget-header input {
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+}
+
+.widget-header select {
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+    background-color: #fff;
+    color: #333;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.widget-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.widget-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 0.75rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.2s ease;
+}
+
+.widget-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-header strong {
+    display: block;
+    color: #333;
+}
+
+.card-header span {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.card-body p {
+    margin: 0.25rem 0;
+    font-size: 0.85rem;
+    color: #444;
+}
+
+.no-results {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.pagination a,
+.pagination strong {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pagination a {
+    background-color: var(--light-gray);
+    color: var(--primary-blue);
+    border: 1px solid #ccc;
+}
+
+.pagination a:hover {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border-color: var(--primary-blue);
+}
+
+.pagination strong {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: 1px solid var(--primary-blue);
+}

@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - IrrNET{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <h2>Welcome to the new IrrNET!</h2>
+    <p class="intro">Your central hub for tools, documents, and updates.</p>
+
+    <section class="quick-links">
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    Documents & Forms
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="20" height="20" fill="#002259"
+                         class="icon">
+                        <!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path d="M88 289.6L64.4 360.2L64.4 160C64.4 124.7 93.1 96 128.4 96L267.1 96C280.9 96 294.4 100.5 305.5 108.8L343.9 137.6C349.4 141.8 356.2 144 363.1 144L480.4 144C515.7 144 544.4 172.7 544.4 208L544.4 224L179 224C137.7 224 101 250.4 87.9 289.6zM509.8 512L131 512C98.2 512 75.1 479.9 85.5 448.8L133.5 304.8C140 285.2 158.4 272 179 272L557.8 272C590.6 272 613.7 304.1 603.3 335.2L555.3 479.2C548.8 498.8 530.4 512 509.8 512z"/>
+                    </svg>
+                </h3>
+            </div>
+            <p>Access company forms, policies, and shared files.</p>
+            <a href="{% url 'document-list' %}" class="card-btn">Go to Documents</a>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    White Cup
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="20" height="20" fill="#002259"
+                         class="icon">
+                        <!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path d="M96 96C113.7 96 128 110.3 128 128L128 464C128 472.8 135.2 480 144 480L544 480C561.7 480 576 494.3 576 512C576 529.7 561.7 544 544 544L144 544C99.8 544 64 508.2 64 464L64 128C64 110.3 78.3 96 96 96zM208 288C225.7 288 240 302.3 240 320L240 384C240 401.7 225.7 416 208 416C190.3 416 176 401.7 176 384L176 320C176 302.3 190.3 288 208 288zM352 224L352 384C352 401.7 337.7 416 320 416C302.3 416 288 401.7 288 384L288 224C288 206.3 302.3 192 320 192C337.7 192 352 206.3 352 224zM432 256C449.7 256 464 270.3 464 288L464 384C464 401.7 449.7 416 432 416C414.3 416 400 401.7 400 384L400 288C400 270.3 414.3 256 432 256zM576 160L576 384C576 401.7 561.7 416 544 416C526.3 416 512 401.7 512 384L512 160C512 142.3 526.3 128 544 128C561.7 128 576 142.3 576 160z"/>
+                    </svg>
+                </h3>
+            </div>
+            <p>View monthly performance and analytics.</p>
+            <a href="https://irrsupply.whitecupgo.com/mitsbi" class="card-btn">Go to White Cup</a>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    Directory
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="25" height="25" fill="#002259"
+                         class="icon">
+                        <path d="M160 64C124.7 64 96 92.7 96 128L96 512C96 547.3 124.7 576 160 576L448 576C483.3 576 512 547.3 512 512L512 128C512 92.7 483.3 64 448 64L160 64zM272 352L336 352C380.2 352 416 387.8 416 432C416 440.8 408.8 448 400 448L208 448C199.2 448 192 440.8 192 432C192 387.8 227.8 352 272 352zM248 256C248 225.1 273.1 200 304 200C334.9 200 360 225.1 360 256C360 286.9 334.9 312 304 312C273.1 312 248 286.9 248 256zM576 144C576 135.2 568.8 128 560 128C551.2 128 544 135.2 544 144L544 208C544 216.8 551.2 224 560 224C568.8 224 576 216.8 576 208L576 144zM576 272C576 263.2 568.8 256 560 256C551.2 256 544 263.2 544 272L544 336C544 344.8 551.2 352 560 352C568.8 352 576 344.8 576 336L576 272zM560 384C551.2 384 544 391.2 544 400L544 464C544 472.8 551.2 480 560 480C568.8 480 576 472.8 576 464L576 400C576 391.2 568.8 384 560 384z"/>
+                    </svg>
+                </h3>
+            </div>
+            <p>Find emails and phone numbers.</p>
+            <a href="{% url 'directory-widget' %}" class="card-btn">Go to Directory</a>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    Milwaukee Tool Truck Calendar
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="25" height="25" fill="#002259"
+                         class="icon">
+                        <!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path d="M32 160C32 124.7 60.7 96 96 96L384 96C419.3 96 448 124.7 448 160L448 192L498.7 192C515.7 192 532 198.7 544 210.7L589.3 256C601.3 268 608 284.3 608 301.3L608 448C608 483.3 579.3 512 544 512L540.7 512C530.3 548.9 496.3 576 456 576C415.7 576 381.8 548.9 371.3 512L268.7 512C258.3 548.9 224.3 576 184 576C143.7 576 109.8 548.9 99.3 512L96 512C60.7 512 32 483.3 32 448L32 160zM544 352L544 301.3L498.7 256L448 256L448 352L544 352zM224 488C224 465.9 206.1 448 184 448C161.9 448 144 465.9 144 488C144 510.1 161.9 528 184 528C206.1 528 224 510.1 224 488zM456 528C478.1 528 496 510.1 496 488C496 465.9 478.1 448 456 448C433.9 448 416 465.9 416 488C416 510.1 433.9 528 456 528z"/>
+                    </svg>
+                </h3>
+            </div>
+            <p>Check the tool truck schedule.</p>
+            <a href="{% url 'tool-truck-calendar' %}" class="card-btn">View Calendar</a>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    Irr Supply Dropbox
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 640 640"
+                         fill="currentColor">
+                        <!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path d="M320.4 180.3L188.4 264.6L320.4 348.9L188.4 433.2L56 348.1L188.3 263.8L56 180.3L188.3 96L320.4 180.3zM187.6 459.7L319.6 375.4L451.6 459.7L319.6 544L187.6 459.7zM320.4 348.1L452.4 263.8L320.4 180.2L451.7 96L584 180.3L451.7 264.6L584 348.8L451.7 433.1L320.4 348.1z"/>
+                    </svg>
+                </h3>
+            </div>
+            <p>Access the company Dropbox.</p>
+            <a href="https://www.dropbox.com/scl/fo/q7rq9a77c2u6dtiqph52n/h?dl=0&rlkey=l5z4e6uquf5b6d9qt6p8fugkv" target="_blank"
+               class="card-btn">Go to Dropbox</a>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    IT Helpdesk
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="22" height="22" fill="#002259"
+                         class="icon">
+                        <!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path d="M431.2 476.5C399.9 498.9 361.5 512 320 512C278.5 512 240.1 498.9 208.8 476.5L266.8 418.5C282.6 427.1 300.8 432 320.1 432C339.4 432 357.5 427.1 373.4 418.5L431.4 476.5zM521.9 477.3C555.7 433.9 575.9 379.3 575.9 320C575.9 260.7 555.8 206.1 522 162.7C531 150.2 529.9 132.6 518.6 121.4C507.3 110.2 489.8 109 477.3 118C433.9 84.2 379.3 64 320 64C260.7 64 206.1 84.2 162.7 118C150.2 109 132.6 110.1 121.4 121.4C110.2 132.7 109 150.2 118 162.7C84.2 206.1 64 260.7 64 320C64 379.3 84.2 433.9 118 477.3C109 489.8 110.1 507.4 121.4 518.6C132.7 529.8 150.2 531 162.7 522C206.1 555.8 260.7 576 320 576C379.3 576 433.9 555.8 477.3 522C489.8 531 507.4 529.9 518.6 518.6C529.8 507.3 531 489.8 522 477.3zM476.4 431.2L418.4 373.2C427 357.4 431.9 339.2 431.9 319.9C431.9 300.6 427 282.5 418.4 266.6L476.4 208.6C498.9 240.1 512 278.5 512 320C512 361.5 498.9 399.9 476.5 431.2zM431.2 163.5L373.2 221.5C357.4 212.9 339.2 208 319.9 208C300.6 208 282.5 212.9 266.6 221.5L208.6 163.5C240.1 141.1 278.5 128 320 128C361.5 128 399.9 141.1 431.2 163.5zM221.5 373.3L163.5 431.3C141.1 399.9 128 361.5 128 320C128 278.5 141.1 240.1 163.5 208.8L221.5 266.8C212.9 282.6 208 300.8 208 320.1C208 339.4 212.9 357.5 221.5 373.4zM272 320C272 293.5 293.5 272 320 272C346.5 272 368 293.5 368 320C368 346.5 346.5 368 320 368C293.5 368 272 346.5 272 320z"/>
+                    </svg>
+                </h3>
+            </div>
+            <p>Submit a support ticket or check your dashboard.</p>
+            <a href="{% url 'dashboard' %}" class="card-btn">Go to Helpdesk</a>
+        </div>
+        {% if user.is_staff %}
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    Admin Panel
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="22" height="22" fill="#002259"
+                         class="icon">
+                        <!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path d="M256 160L256 224L384 224L384 160C384 124.7 355.3 96 320 96C284.7 96 256 124.7 256 160zM192 224L192 160C192 89.3 249.3 32 320 32C390.7 32 448 89.3 448 160L448 224C483.3 224 512 252.7 512 288L512 512C512 547.3 483.3 576 448 576L192 576C156.7 576 128 547.3 128 512L128 288C128 252.7 156.7 224 192 224z"/>
+                    </svg>
+                </h3>
+            </div>
+            <p>Access the administrator interface.</p>
+            <a href="/admin/" class="card-btn">Go to Admin</a>
+        </div>
+        {% endif %}
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

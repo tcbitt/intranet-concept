@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Submit a Helpdesk Ticket{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/helpdesk.css' %}">
+<link rel="stylesheet" href="{% static 'css/widget.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="directory-widget">
+    <h2 style="margin-top: 0; color: var(--primary-blue); text-align: center;">Submit a Helpdesk Ticket</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.title.label_tag }}
+            {{ form.title }}
+            {% if form.title.errors %}
+                <div class="field-error">{{ form.title.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.description.label_tag }}
+            {{ form.description }}
+            {% if form.description.errors %}
+                <div class="field-error">{{ form.description.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.assigned_to.label_tag }}
+            {{ form.assigned_to }}
+            {% if form.assigned_to.errors %}
+                <div class="field-error">{{ form.assigned_to.errors }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn">Submit Ticket</button>
+    </form>
+</div>
+{% endblock %}

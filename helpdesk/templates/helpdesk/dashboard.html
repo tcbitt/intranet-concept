@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/helpdesk.css' %}">
+{% endblock %}
+{% load role_tags %}
+{% block title %}Helpdesk Dashboard{% endblock %}
+
+{% block content %}
+<section class="dashboard-section">
+    <h2>Helpdesk Dashboard</h2>
+    {% if status_counts %}
+    <div class="dashboard-block">
+        <h3>Ticket Status Summary</h3>
+        <div class="status-summary">
+            {% for status, count in status_counts.items %}
+            <div class="status-card status-{{ status }}">
+                <span class="status-label">{{ status|title }}</span>
+                <span class="status-count">{{ count }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if my_tickets %}
+    <div class="dashboard-block">
+        <h3>Tickets Assigned to Me</h3>
+        <table class="ticket-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Subject</th>
+                <th>Submitted By</th>
+                <th>Assigned To</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Last Comment</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ticket in my_tickets %}
+            <tr onclick="window.location.href='{% url 'ticket_detail' ticket.pk %}'">
+                <td>#{{ ticket.pk }}</td>
+                <td>{{ ticket.title }}</td>
+                <td>{{ ticket.created_by.get_full_name|default:ticket.created_by.username }}</td>
+                <td>{{ ticket.assigned_to.get_full_name|default:"Unassigned" }}</td>
+                <td>{{ ticket.status|capfirst }}</td>
+                <td>{{ ticket.created_at|date:"M d, Y" }}</td>
+                <td>
+                    {% with ticket.comments.last as last_comment %}
+                    {% if last_comment %}
+                    {{ last_comment.comment|truncatewords:10 }}
+                    {% else %}
+                    <em>No comments</em>
+                    {% endif %}
+                    {% endwith %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    {% if unassigned_tickets %}
+    <div class="dashboard-block">
+        <h3>Unassigned Tickets (Open)</h3>
+        <table class="ticket-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Subject</th>
+                <th>Submitted By</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Last Comment</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ticket in unassigned_tickets %}
+            <tr onclick="window.location.href='{% url 'ticket_detail' ticket.pk %}'">
+                <td>#{{ ticket.pk }}</td>
+                <td>{{ ticket.title }}</td>
+                <td>{{ ticket.created_by.get_full_name|default:ticket.created_by.username }}</td>
+                <td>{{ ticket.status|capfirst }}</td>
+                <td>{{ ticket.created_at|date:"M d, Y" }}</td>
+                <td>
+                    {% with ticket.comments.last as last_comment %}
+                    {% if last_comment %}
+                    {{ last_comment.comment|truncatewords:10 }}
+                    {% else %}
+                    <em>No comments</em>
+                    {% endif %}
+                    {% endwith %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    {% if all_tickets %}
+    <div class="dashboard-block">
+        <h3>All Active Tickets</h3>
+        <table class="ticket-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Subject</th>
+                <th>Submitted By</th>
+                <th>Assigned To</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Last Comment</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ticket in all_tickets %}
+            <tr onclick="window.location.href='{% url 'ticket_detail' ticket.pk %}'">
+                <td>#{{ ticket.pk }}</td>
+                <td>{{ ticket.title }}</td>
+                <td>{{ ticket.created_by.get_full_name|default:ticket.created_by.username }}</td>
+                <td>{{ ticket.assigned_to.get_full_name|default:"Unassigned" }}</td>
+                <td>{{ ticket.status|capfirst }}</td>
+                <td>{{ ticket.created_at|date:"M d, Y" }}</td>
+                <td>
+                    {% with ticket.comments.last as last_comment %}
+                    {% if last_comment %}
+                    {{ last_comment.comment|truncatewords:10 }}
+                    {% else %}
+                    <em>No comments</em>
+                    {% endif %}
+                    {% endwith %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    {% if user_management %}
+    <div class="dashboard-block">
+        <a href="/admin/auth/user/" class="button">Manage Users</a>
+    </div>
+    {% endif %}
+
+    {% if archived_my_tickets %}
+    <div class="dashboard-block">
+        <h3>
+            Archived Tickets
+            <button onclick="toggleArchive()" class="btn btn-sm" style="float: right;">Toggle View</button>
+        </h3>
+        <div id="archived-section" style="display: none;">
+            <table class="ticket-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>Closed On</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ticket in archived_my_tickets %}
+                <tr onclick="window.location.href='{% url 'ticket_detail' ticket.pk %}'">
+                    <td>#{{ ticket.pk }}</td>
+                    <td>{{ ticket.title }}</td>
+                    <td>{{ ticket.status|capfirst }}</td>
+                    <td>{{ ticket.updated_at|date:"M d, Y" }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</section>
+
+{% block extra_js %}
+<script src="{% static 'js/helpdesk.js' %}"></script>
+{% endblock %}
+{% endblock %}

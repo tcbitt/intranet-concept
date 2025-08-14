@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Directory - IrrNET{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/widget.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="directory-widget">
+    <div class="widget-header">
+        <h3>Directory</h3>
+        <form method="get">
+            <input type="text" name="search" value="{{ search }}" placeholder="Search name or dept..."
+                   autocomplete="off"/>
+        </form>
+    </div>
+    <div id="widget-results">
+        {% include 'directory/_widget_results.html' %}
+    </div>
+</div>
+
+{% block extra_js %}
+<script src="{% static 'js/directory-autosubmit.js' %}"></script>
+{% endblock %}
+{% endblock %}
