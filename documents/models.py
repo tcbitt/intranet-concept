@@ -45,23 +45,31 @@ class Document(models.Model):
 
     pdf_file = models.FileField(upload_to='documents/pdf/', blank=True, null=True)
 
+    @property
+    def extension(self):
+        return self.file.name.split('.')[-1].lower()
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-        if self.file.name.endswith('.docx'):
+        supported = ['docx', 'xlsx', 'pptx', 'xls']
+        ext = self.extension
+
+        if ext in supported:
             input_path = os.path.join(settings.MEDIA_ROOT, self.file.name)
             output_dir = os.path.join(settings.MEDIA_ROOT, 'documents/pdf/')
             os.makedirs(output_dir, exist_ok=True)
 
-            convert(input_path, output_dir)
+            # Use LibreOffice for conversion
+            output_path = os.path.join(output_dir, f"{self.pk}.pdf")
+            os.system(f'soffice --headless --convert-to pdf "{input_path}" --outdir "{output_dir}"')
 
-            base_name = os.path.splitext(os.path.basename(self.file.name))[0]
-            pdf_path = os.path.join('documents/pdf/', base_name + '.pdf')
-
-            self.pdf_file.name = pdf_path
+            self.pdf_file.name = os.path.relpath(output_path, settings.MEDIA_ROOT)
             super().save(update_fields=['pdf_file'])
 
     def __str__(self):
         return self.title
+
+
 
 

@@ -8,7 +8,7 @@
   <h2>Select a Department</h2>
   <ul class="department-list">
     {% for dept in departments %}
-      <li><a href="{% url 'folder-view' dept.slug %}">{{ dept.name }}</a></li>
+      <li><a href="{% url 'department-documents' dept.slug %}">{{ dept.name }}</a></li>
     {% endfor %}
   </ul>
 </div>

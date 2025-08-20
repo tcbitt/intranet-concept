@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ asset.name }}</h1>
+<p>Type: {{ asset.asset_type.name }}</p>
+<p>Model: {{ asset.model_type.name }}</p>
+<p>Checked out to:
+  {% if asset.checked_out_to_user %}
+    {{ asset.checked_out_to_user.get_full_name }}
+  {% elif asset.checked_out_to_branch %}
+    {{ asset.checked_out_to_branch.name }}
+  {% else %}
+    Not checked out
+  {% endif %}
+</p>
+<a href="{% url 'asset-edit' asset.pk %}">Edit</a>
+{% endblock %}

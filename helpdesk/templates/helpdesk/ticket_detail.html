@@ -8,12 +8,12 @@
 
 {% block content %}
 <div class="widget">
-    <a href="{% url 'dashboard' %}" class="btn btn-sm back-button">← Back to Dashboard</a>
     <h2>{{ ticket.title }}</h2>
     <p><strong>Status:</strong> {{ ticket.status|capfirst }}</p>
     <p><strong>Assigned to:</strong> {{ ticket.assigned_to.get_full_name|default:"Unassigned" }}</p>
+    <p><strong>Submitted by:</strong> {{ ticket.created_by.get_full_name|default:ticket.created_by.username }}</p>
+    <p><strong>Branch:</strong> {{ ticket.created_by.userprofile.branch|default:"Not specified" }}</p>
     <p><strong>Description:</strong> {{ ticket.description }}</p>
-
     <hr>
 
     {% if update_form %}
@@ -44,7 +44,8 @@
     <h3>Comments</h3>
     <ul>
         {% for comment in comments %}
-        <li><strong>{{ comment.author.get_full_name|default:comment.author.username }}</strong>: {{ comment.comment }}</li>
+        <li><strong>{{ comment.author.get_full_name|default:comment.author.username }}</strong>: {{ comment.comment }}
+        </li>
         {% endfor %}
     </ul>
 

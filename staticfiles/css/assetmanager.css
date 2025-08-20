@@ -1,0 +1,28 @@
+.hidden {
+    display: none !important;
+}
+
+.asset-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+}
+
+.asset-table th,
+.asset-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.asset-table th {
+    background-color: var(--light-gray);
+    color: var(--primary-blue);
+    font-weight: bold;
+}
+
+.asset-table tr:hover {
+    background-color: #f0f8ff;
+    cursor: pointer;
+}

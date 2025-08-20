@@ -6,14 +6,16 @@
 
 {% block content %}
 <div class="documents-container">
-  <h2>{{ document.title }}</h2>
-  <p>{{ document.description }}</p>
-  <p>Uploaded: {{ document.uploaded_at|date:"M d, Y" }}</p>
+    <h2>{{ document.title }}</h2>
+    <p>{{ document.description }}</p>
+    <p>Uploaded: {{ document.uploaded_at|date:"M d, Y" }}</p>
 
-  {% if document.file %}
-    <iframe src="{{ document.pdf_file.url }}" width="100%" height="600px" style="border: none;"></iframe>
-  {% else %}
-    <p>No file attached.</p>
-  {% endif %}
+    {% if document.pdf_file %}
+    <embed src="{{ document.pdf_file.url }}" type="application/pdf" width="100%" height="600px">
+    {% else %}
+    <p>This file can’t be previewed.</p>
+    {% endif %}
+
+    <a href="{{ document.file.url }}" download>Download Original File</a>
 </div>
 {% endblock %}

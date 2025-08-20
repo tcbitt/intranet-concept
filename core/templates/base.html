@@ -1,4 +1,6 @@
 {% load static %}
+{% load url_utils %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,16 +49,27 @@
     </div>
     -->
 </header>
+{% is_current_url "/login/" as is_login %}
+{% if not is_login %}
 <div class="layout">
-    <aside class="sidebar">
-
+    <div class="sidebar-toggle-wrapper">
+        <button id="toggleSidebar" class="sidebar-toggle">
+            <svg id="toggleIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                 fill="white">
+                <path d="M8 5l8 7-8 7V5z"/>
+            </svg>
+        </button>
+    </div>
+    {% is_current_url "/" as is_home %}
+    <aside class="sidebar {% if not is_home %}collapsed{% endif %}">
         <nav>
             <ul>
-                <li><a href="{% url 'hr-home' %}">Human Resources</a></li>
+                {% block sidebar_links %}
+                {% endblock %}
             </ul>
         </nav>
     </aside>
-
+    {% endif %}
     <main class="content">
         {% load breadcrumb_tags %}
         {% get_breadcrumbs as breadcrumbs %}
@@ -71,8 +84,8 @@
     To Our Website! ↪
 </a>
 {% block extra_js %}
-<script src="{% static 'js/breadcrumb-orb.js' %}"></script>
 {% endblock %}
+<script src="{% static 'js/sidebar-toggle.js' %}"></script>
 </body>
 <footer class="site-footer">
     <div class="footer-content">

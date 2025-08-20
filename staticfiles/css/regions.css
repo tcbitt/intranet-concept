@@ -1,0 +1,38 @@
+.region-card {
+  background-color: #f4f4f4;
+  padding: 1em;
+  border-radius: 6px;
+  margin-bottom: 2em;
+}
+
+.region-code {
+  font-weight: normal;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.branch-list {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.branch-list li {
+  flex: 1 1 300px;
+}
+
+.branch-bubble {
+  background-color: #eef2f7;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  padding: 1em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.branch-bubble:hover {
+  transform: scale(1.02);
+  background-color: #e2e8f0;
+}

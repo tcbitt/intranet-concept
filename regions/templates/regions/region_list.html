@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/regions.css' %}">
+{% endblock %}
+{% block title %}Regions Overview{% endblock %}
+
+{% block content %}
+<h1>Regions Overview</h1>
+
+{% for region in regions %}
+<div class="region-card">
+    <h2>{{ region.name }} {% if region.code %}<span class="region-code">({{ region.code }})</span>{% endif %}</h2>
+    <p><strong>Manager:</strong>
+        {% if region.manager %}
+        {{ region.manager.get_full_name }} ({{ region.manager.username }})
+        {% else %}
+        <em>Unassigned</em>
+        {% endif %}
+    </p>
+    {% if region.description %}
+    <p>{{ region.description }}</p>
+    {% endif %}
+
+    <h4>Branches:</h4>
+    <ul class="branch-list">
+        {% for branch in region.branches.all %}
+        <li>
+            <div class="branch-bubble">
+                <strong>{{ branch.location_number }} — {{ branch.name }}</strong><br>
+                {{ branch.city }}, {{ branch.state }}<br>
+                <small>{{ branch.address }} | {{ branch.phone }}</small>
+            </div>
+        </li>
+        {% empty %}
+        <li><em>No branches assigned to this region.</em></li>
+        {% endfor %}
+    </ul>
+
+</div>
+<hr>
+{% endfor %}
+{% endblock %}

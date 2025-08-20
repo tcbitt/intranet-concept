@@ -1,0 +1,2 @@
+# NOTE: This app is currently unused but may be reused for rendering Document objects
+# from other apps like helpdesk or HR. Viewer logic is isolated here for modularity.

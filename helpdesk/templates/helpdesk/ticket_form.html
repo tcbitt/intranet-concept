@@ -36,15 +36,6 @@
             <div class="field-error">{{ form.assigned_to.errors }}</div>
             {% endif %}
         </div>
-
-        <div class="form-group">
-            <label>Branch</label>
-            <input type="text"
-                   value="{{ request.user.userprofile.branch.name }} - {{ request.user.userprofile.branch.location_number }}"
-                   readonly class="readonly-field">
-        </div>
-
-
         <button type="submit" class="btn">Submit Ticket</button>
     </form>
 </div>

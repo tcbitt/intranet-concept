@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/widget.css' %}">
+<link rel="stylesheet" href="{% static 'css/assetmanager.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="widget">
+    <div class="widget-header">
+        <h3>All Assets</h3>
+        <form method="get">
+            <input type="text" name="search" placeholder="Search assets..."/>
+        </form>
+        <div class="view-toggle">
+            <button type="button" id="toggleView" class="btn">Change View</button>
+        </div>
+    </div>
+
+    {% if assets %}
+    <!-- Card View -->
+    <div id="cardView" class="card-view">
+        {% for asset in assets %}
+        <div class="widget-card">
+            <div class="card-header">
+                <strong>{{ asset.name }}</strong>
+                <span>ID: {{ asset.pk }}</span>
+            </div>
+            <div class="card-body">
+                {% if asset.checked_out_to_user %}
+                <p><strong>Checked Out To:</strong>
+                    {{ asset.checked_out_to_user.get_full_name|default:asset.checked_out_to_user.username }}</p>
+                {% elif asset.checked_out_to_branch %}
+                <p><strong>Checked Out To Branch:</strong> {{ asset.checked_out_to_branch.name }}</p>
+                {% elif asset.location %}
+                <p><strong>Location:</strong> {{ asset.location }}</p>
+                {% else %}
+                <p><strong>Location:</strong> Unassigned</p>
+                {% endif %}
+
+                {% if asset.status %}
+                <p><strong>Status:</strong> {{ asset.status }}</p>
+                {% endif %}
+                <a href="{% url 'asset-detail' asset.pk %}" class="btn">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Table View -->
+    <div id="listView" class="list-view hidden">
+        <table class="asset-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>ID</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for asset in assets %}
+                <tr onclick="window.location.href='{% url 'asset-detail' asset.pk %}'">
+                    <td>{{ asset.name }}</td>
+                    <td>{{ asset.pk }}</td>
+                    <td>
+                        {% if asset.checked_out_to_user %}
+                        {{ asset.checked_out_to_user.get_full_name|default:asset.checked_out_to_user.username }}
+                        {% elif asset.checked_out_to_branch %}
+                        {{ asset.checked_out_to_branch.name }}
+                        {% elif asset.location %}
+                        {{ asset.location }}
+                        {% else %}
+                        Unassigned
+                        {% endif %}
+                    </td>
+                    <td>{{ asset.status|default:"—" }}</td>
+                    <td><a href="{% url 'asset-detail' asset.pk %}" class="btn">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="no-results">No assets found.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/view-toggle.js' %}"></script>
+{% endblock %}

@@ -54,6 +54,7 @@ def ticket_detail(request, pk):
             update_form = TicketUpdateForm(request.POST, instance=ticket)
             if update_form.is_valid():
                 update_form.save()
+                return redirect('dashboard')
 
     if request.method == 'POST' and 'comment_submit' in request.POST:
         comment_form = CommentForm(request.POST)
@@ -131,4 +132,4 @@ def dashboard(request):
     return render(request, 'helpdesk/dashboard.html', context)
 
 def no_access(request):
-    return render(request, 'helpdesk/no_access.html')
+    return render(request, 'core/no_access.html')

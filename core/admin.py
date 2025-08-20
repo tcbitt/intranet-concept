@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from core.forms import UserProfileInlineForm
-from core.models import UserProfile, Branch, Department, Role
+from core.models import UserProfile, Branch, Department, Role, Region
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -50,9 +50,9 @@ admin.site.register(User, CustomUserAdmin)
 
 @admin.register(Branch)
 class BranchAdmin(admin.ModelAdmin):
-    list_display = ('location_number', 'name')
-    search_fields = ('location_number', 'name')
-
+    list_display = ('location_number', 'name', 'region')
+    search_fields = ('location_number', 'name', 'region__name')
+    list_filter = ('region',)
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
@@ -68,3 +68,10 @@ class DepartmentAdmin(admin.ModelAdmin):
 class RoleAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
+
+@admin.register(Region)
+class RegionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'code', 'manager')
+    search_fields = ('name', 'code', 'manager__username')
+    list_filter = ('manager',)
+

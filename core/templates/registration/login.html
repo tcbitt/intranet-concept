@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Login{% endblock %}
@@ -20,7 +20,7 @@
           {{ form.non_field_errors }}
         </div>
       {% endif %}
-
+        <!-- DEBUG: show_sidebar is {{ show_sidebar }} -->
       <div class="form-group">
         {{ form.username.label_tag }}
         {{ form.username }}

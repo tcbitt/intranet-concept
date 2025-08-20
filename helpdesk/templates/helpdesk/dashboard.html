@@ -27,16 +27,40 @@
         </div>
     </div>
     {% endif %}
+    <div class="dashboard-block">
+        <h3>
+            My Tickets
+        </h3>
+        <div id="assigned-section">
+            {% include "helpdesk/_ticket_table.html" with tickets=my_tickets show_comments=True %}
+        </div>
+    </div>
+    <div class="dashboard-block">
+        <h3>
+            Unassigned Tickets (Open)
+            <button onclick="toggleSection('unassigned-section', this)" class="btn" style="float: right;">Hide</button>
+        </h3>
+        <div id="unassigned-section">
+            {% include "helpdesk/_ticket_table.html" with tickets=unassigned_tickets show_comments=True %}
+        </div>
+    </div>
 
-    {% include "helpdesk/_ticket_table.html" with tickets=my_tickets title="Tickets Assigned to Me" show_comments=True %}
-    {% include "helpdesk/_ticket_table.html" with tickets=unassigned_tickets title="Unassigned Tickets (Open)" show_comments=True %}
-    {% include "helpdesk/_ticket_table.html" with tickets=all_tickets title="All Active Tickets" show_comments=True %}
+    <div class="dashboard-block">
+        <h3>
+            All Active Tickets
+            <button onclick="toggleSection('active-section', this)" class="btn" style="float: right;">Hide
+            </button>
+        </h3>
+        <div id="active-section">
+            {% include "helpdesk/_ticket_table.html" with tickets=all_tickets show_comments=True %}
+        </div>
+    </div>
 
     {% if archived_my_tickets %}
     <div class="dashboard-block">
         <h3>
             Archived Tickets
-            <button onclick="toggleArchive()" class="btn btn-sm" style="float: right;">Toggle View</button>
+            <button onclick="toggleSection('archived-section', this)" class="btn" style="float: right;">Show</button>
         </h3>
         <div id="archived-section" style="display: none;">
             {% include "helpdesk/_ticket_table.html" with tickets=archived_my_tickets show_comments=False %}
@@ -63,6 +87,7 @@
         </div>
     </div>
     {% endif %}
+
 </section>
 
 {% block extra_js %}

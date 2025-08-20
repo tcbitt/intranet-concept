@@ -5,5 +5,5 @@ class AllowIframeFromLocalhostMiddleware:
     def __call__(self, request):
         response = self.get_response(request)
         response.headers['X-Frame-Options'] = 'ALLOWALL'
-        response.headers['Content-Security-Policy'] = "frame-ancestors http://localhost:8000"
+        response.headers['Content-Security-Policy'] = "frame-ancestors http://localhost:8000 http://127.0.0.1:8000"
         return response

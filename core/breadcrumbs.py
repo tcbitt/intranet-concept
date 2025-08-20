@@ -1,7 +1,5 @@
 from django.urls import reverse_lazy
 
-from django.urls import reverse_lazy
-
 BREADCRUMB_MAP = {
     # Core
     'core:home': [
@@ -34,7 +32,7 @@ BREADCRUMB_MAP = {
     'document-detail': lambda request, context: [
         {'label': 'Home', 'url': reverse_lazy('core:home')},
         {'label': 'Documents', 'url': reverse_lazy('document-list')},
-        {'label': context.get('doc').title, 'url': ''},
+        {'label': getattr(context.get('document'), 'title', 'Untitled Document'), 'url': ''},
     ],
     'department-overview': [
         {'label': 'Home', 'url': reverse_lazy('core:home')},
@@ -92,5 +90,77 @@ BREADCRUMB_MAP = {
         {'label': 'Home', 'url': reverse_lazy('core:home')},
         {'label': 'HR Home', 'url': ''},
     ],
+    # Assets
+    'asset-list': [
+        {'label': 'Home', 'url': reverse_lazy('core:home')},
+        {'label': 'Assets', 'url': ''},
+    ],
+
+    'asset-create': [
+        {'label': 'Home', 'url': reverse_lazy('core:home')},
+        {'label': 'Assets', 'url': reverse_lazy('asset-list')},
+        {'label': 'Create Asset', 'url': ''},
+    ],
+
+    'asset-dashboard': [
+        {'label': 'Home', 'url': reverse_lazy('core:home')},
+        {'label': 'Assets', 'url': reverse_lazy('asset-list')},
+        {'label': 'Dashboard', 'url': ''},
+    ],
+
+    'asset-edit': lambda request, context: [
+        {'label': 'Home', 'url': reverse_lazy('core:home')},
+        {'label': 'Assets', 'url': reverse_lazy('asset-list')},
+        {'label': getattr(context.get('asset'), 'name', 'Edit Asset'),
+         'url': reverse_lazy('asset-detail', args=[context['asset'].pk])},
+        {'label': 'Edit', 'url': ''},
+    ],
+
+    'asset-detail': lambda request, context: [
+        {'label': 'Home', 'url': reverse_lazy('core:home')},
+        {'label': 'Assets', 'url': reverse_lazy('asset-list')},
+        {'label': getattr(context.get('asset'), 'name', f"Asset #{context.get('asset').pk}"), 'url': ''},
+    ],
+
+    'no_access': [
+        {'label': 'Home', 'url': reverse_lazy('core:home')},
+        {'label': 'Access Denied', 'url': ''},
+    ],
+
 }
 
+
+def auto_breadcrumb(view_name):
+    if not view_name:
+        return [{'label': 'Home', 'url': reverse_lazy('core:home')}]
+
+    parts = view_name.split(':') if ':' in view_name else [view_name]
+    label = parts[-1].replace('-', ' ').replace('_', ' ').title()
+
+    logger.info(f"Auto-generated breadcrumb for view '{view_name}': [{label}]")
+
+    return [
+        {'label': 'Home', 'url': reverse_lazy('core:home')},
+        {'label': label, 'url': ''},
+    ]
+
+
+# ----------------------BREADCRUMB LOGGER TO FIND MISSING ONES-----------------------
+import logging
+import os
+
+logger = logging.getLogger('breadcrumbs')
+logger.setLevel(logging.INFO)
+
+log_dir = os.path.join(os.path.dirname(__file__), 'logs')
+os.makedirs(log_dir, exist_ok=True)
+
+log_file = os.path.join(log_dir, 'auto_breadcrumbs.log')
+file_handler = logging.FileHandler(log_file)
+file_handler.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(asctime)s - %(message)s')
+file_handler.setFormatter(formatter)
+
+if not logger.hasHandlers():
+    logger.addHandler(file_handler)

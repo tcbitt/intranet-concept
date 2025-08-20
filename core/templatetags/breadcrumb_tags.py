@@ -1,5 +1,5 @@
 from django import template
-from core.breadcrumbs import BREADCRUMB_MAP
+from core.breadcrumbs import BREADCRUMB_MAP, auto_breadcrumb
 from django.urls import reverse_lazy
 
 register = template.Library()
@@ -13,12 +13,18 @@ def get_breadcrumbs(context):
 
     if callable(breadcrumb_config):
         breadcrumbs = breadcrumb_config(request, context)
+    elif breadcrumb_config:
+        breadcrumbs = breadcrumb_config
     else:
-        breadcrumbs = breadcrumb_config or []
+        breadcrumbs = auto_breadcrumb(view_name)
 
-    # Always prepend Home
+    breadcrumbs = [
+        crumb for crumb in breadcrumbs
+        if isinstance(crumb, dict) and 'label' in crumb and 'url' in crumb
+    ]
+
     home_crumb = {'label': 'Home', 'url': reverse_lazy('core:home')}
-    if breadcrumbs and breadcrumbs[0]['label'] != 'Home':
+    if not breadcrumbs or breadcrumbs[0]['label'] != 'Home':
         breadcrumbs.insert(0, home_crumb)
 
     return breadcrumbs

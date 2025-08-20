@@ -9,6 +9,7 @@
             <th>ID</th>
             <th>Subject</th>
             <th>Submitted By</th>
+            <th>Branch</th>
             <th>Assigned To</th>
             <th>Status</th>
             <th>Created</th>
@@ -23,6 +24,7 @@
             <td>#{{ ticket.pk }}</td>
             <td>{{ ticket.title }}</td>
             <td>{{ ticket.created_by.get_full_name|default:ticket.created_by.username }}</td>
+            <td>{{ ticket.created_by.userprofile.branch.location_number }} </td>
             <td>{{ ticket.assigned_to.get_full_name|default:"Unassigned" }}</td>
             <td>{{ ticket.get_status_display }}</td>
             <td>{{ ticket.created_at|date:"M d, Y" }}</td>

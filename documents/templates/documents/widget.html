@@ -6,31 +6,33 @@
 
 {% block content %}
 <div class="documents-container">
-  <h2 class="documents-title">Folders</h2>
+    <h2 class="documents-title">Folders</h2>
 
-  {% if folders %}
+    {% if folders %}
     <div class="documents-grid">
-      {% for folder in folders %}
+        {% for folder in folders %}
         <div class="document-card">
-          <div class="document-card-body">
-            <h5 class="document-title">{{ folder.name }}</h5>
-            <p class="document-description">
-              Department: {{ folder.department.name }}
-              {% if folder.parent %}<br>Parent: {{ folder.parent.name }}{% endif %}
-            </p>
-          </div>
-          <div class="document-card-footer">
-            <a href="{% url 'folder-view' folder.department.slug folder.id %}" class="btn btn-sm btn-primary">
-              Open Folder
-            </a>
-          </div>
+            <div class="document-card-body">
+                <h5 class="document-title">
+                    <a href="{% url 'folder-view' folder.department.slug folder.id %}">{{ folder.name }}</a>
+                </h5>
+                <p class="document-description">
+                    Department: {{ folder.department.name }}
+                    {% if folder.parent %}<br>Parent: {{ folder.parent.name }}{% endif %}
+                </p>
+            </div>
+            <div class="document-card-footer">
+                <a href="{% url 'folder-view' folder.department.slug folder.id %}" class="btn">
+                    Open Folder
+                </a>
+            </div>
         </div>
-      {% endfor %}
+        {% endfor %}
     </div>
-  {% else %}
+    {% else %}
     <div class="document-alert">
-      No folders found. Create one to get started!
+        No folders found. Create one to get started!
     </div>
-  {% endif %}
+    {% endif %}
 </div>
 {% endblock %}

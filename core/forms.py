@@ -21,7 +21,7 @@ class StyledLoginForm(AuthenticationForm):
 class UserProfileInlineForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['branch', 'department', 'role', 'phone']
+        fields = ['branch', 'department', 'role', 'phone', 'extension']
 
     def clean_branch(self):
         branch = self.cleaned_data.get('branch')
