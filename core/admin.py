@@ -61,8 +61,13 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    search_fields = ('name',)
+    list_display = ('name', 'get_managers')
+    search_fields = ('name', 'managers__username')
+    filter_horizontal = ('managers',)
+
+    def get_managers(self, obj):
+        return ", ".join([user.get_full_name() for user in obj.managers.all()])
+    get_managers.short_description = "Managers"
 
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):

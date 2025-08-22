@@ -1,0 +1,38 @@
+{% if status_counts_display %}
+<div class="dashboard-block">
+    <h3>Ticket Status Summary</h3>
+    <div class="status-summary">
+        {% for status in status_counts_display %}
+        <div class="status-card status-{{ status.code }}">
+            <span class="status-label">{{ status.label }}</span>
+            <span class="status-count">{{ status.count }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<div class="dashboard-block">
+    <h3>My Tickets</h3>
+    {% include "helpdesk/_ticket_table.html" with tickets=my_tickets show_comments=True %}
+</div>
+
+{% if unassigned_tickets %}
+<div class="dashboard-block">
+    <h3>Unassigned Tickets (Open)</h3>
+    {% include "helpdesk/_ticket_table.html" with tickets=unassigned_tickets show_comments=True %}
+</div>
+{% endif %}
+
+{% if all_tickets %}
+<div class="dashboard-block">
+    <h3>All Active Tickets</h3>
+    {% include "helpdesk/_ticket_table.html" with tickets=all_tickets show_comments=True %}
+</div>
+{% endif %}
+
+{% if archived_my_tickets %}
+<div class="dashboard-block">
+    <h3>Archived Tickets</h3>
+    {% include "helpdesk/_ticket_table.html" with tickets=archived_my_tickets show_comments=False %}
+{% endif %}

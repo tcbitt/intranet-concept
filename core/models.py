@@ -25,12 +25,15 @@ class Branch(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=100)
+    managers = models.ManyToManyField(User, blank=True, related_name='managed_departments')
+    slug = models.SlugField(unique=True, default='enter-slug')
 
     def __str__(self):
         return self.name
 
 class Role(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True, related_name='roles')
 
     def __str__(self):
         return self.name

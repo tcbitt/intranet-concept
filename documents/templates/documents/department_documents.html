@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/docs_widget.css' %}">
+{% endblock %}
+{% block content %}
+<div class="documents-container">
+  <h2>{{ department.name }} Department</h2>
+
+  {% if folders %}
+  <h3>Folders</h3>
+  <ul class="folder-list">
+    {% for folder in folders %}
+      <li><a href="{% url 'folder-view' department.slug folder.id %}">{{ folder.name }}</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if documents %}
+  <h3>Unfiled Documents</h3>
+  <ul class="document-list">
+    {% for doc in documents %}
+      <li><a href="{% url 'document-detail' doc.id %}">{{ doc.title }}</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if form %}
+  <h3>Upload a Document</h3>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

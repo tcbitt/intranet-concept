@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 
+from core.utils import is_dev_server
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,7 +26,7 @@ SECRET_KEY = 'django-insecure-+3u!wd-$5o1*vqn3#_%!7n8af_14zef2wwnk8v$v6mru$#*fgr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'web']
 
 # Application definition
 
@@ -71,6 +73,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'accesscontrol.context_processors.support_role',
+                'core.context_processors.settings_context',
             ],
         },
     },
@@ -81,12 +84,31 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+ENVIRONMENT = os.getenv('DJANGO_ENV')
+SHOW_ENV_BANNER = is_dev_server()
+
+if ENVIRONMENT == 'production':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'irrnet_db',
+            'USER': 'irrnet_admin',
+            'PASSWORD': 'OP51H[q\|wn4e@WH/5end6T4~£1u-`2v',
+            'HOST': 'db',
+            'PORT': '5432',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'irrnet_dev',
+            'USER': 'irrnet_admin',
+            'PASSWORD': 'OP51H[q\|wn4e@WH/5end6T4~£1u-`2v',
+            'HOST': 'localhost',
+            'PORT': '5433',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

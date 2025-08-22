@@ -1,17 +1,35 @@
 {% extends "base.html" %}
-
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/widget.css' %}">
+<link rel="stylesheet" href="{% static 'css/assetmanager.css' %}">
+{% endblock %}
 {% block content %}
-<h1>{{ asset.name }}</h1>
-<p>Type: {{ asset.asset_type.name }}</p>
-<p>Model: {{ asset.model_type.name }}</p>
-<p>Checked out to:
-  {% if asset.checked_out_to_user %}
-    {{ asset.checked_out_to_user.get_full_name }}
-  {% elif asset.checked_out_to_branch %}
-    {{ asset.checked_out_to_branch.name }}
-  {% else %}
-    Not checked out
-  {% endif %}
-</p>
-<a href="{% url 'asset-edit' asset.pk %}">Edit</a>
+<div class="widget">
+  <div class="widget-header">
+    <h3 class="widget-title">{{ asset.name }}</h3>
+    <div class="widget-actions">
+      <a href="{% url 'asset-edit' asset.pk %}" class="create-btn">Edit</a>
+    </div>
+  </div>
+
+  <div class="widget-card">
+    <div class="card-header">
+      <strong>Asset Details</strong>
+    </div>
+    <div class="card-body">
+      <p><strong>Type:</strong> {{ asset.asset_type.name }}</p>
+      <p><strong>Model:</strong> {{ asset.model_type.name }}</p>
+      <p><strong>Checked out to:</strong>
+        {% if asset.checked_out_to_user %}
+          {{ asset.checked_out_to_user.get_full_name }}
+        {% elif asset.checked_out_to_branch %}
+          {{ asset.checked_out_to_branch.name }} - {{ asset.checked_out_to_branch.location_number }}
+        {% else %}
+          Not checked out
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</div>
 {% endblock %}

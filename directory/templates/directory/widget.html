@@ -16,12 +16,15 @@
                    autocomplete="off"/>
         </form>
     </div>
-    <div id="widget-results">
-        {% include 'directory/_widget_results.html' %}
+    <div id="directory-section" class="ajax-section">
+        <div id="widget-results" class="ajax-content">
+            {% include "directory/_widget_results.html" with page_obj=page_obj search=search %}
+        </div>
     </div>
 </div>
 
 {% block extra_js %}
 <script src="{% static 'js/directory-autosubmit.js' %}"></script>
+<script src="{% static 'js/pagination.js' %}"></script>
 {% endblock %}
 {% endblock %}

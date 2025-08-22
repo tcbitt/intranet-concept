@@ -5,19 +5,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!toggleBtn || !cardView || !listView) return;
 
-    let isListView = localStorage.getItem('assetView') === 'list';
+    let currentView = localStorage.getItem('assetView') || 'list';
 
-    function applyView() {
-        cardView.classList.toggle('hidden', isListView);
-        listView.classList.toggle('hidden', !isListView);
-        toggleBtn.textContent = isListView ? 'Switch to Card View' : 'Switch to List View';
-        localStorage.setItem('assetView', isListView ? 'list' : 'card');
+    if (currentView === 'card') {
+        cardView.classList.remove('hidden');
+        listView.classList.add('hidden');
+        toggleBtn.textContent = 'Switch to List View';
+    } else {
+        cardView.classList.add('hidden');
+        listView.classList.remove('hidden');
+        toggleBtn.textContent = 'Switch to Card View';
     }
 
-    applyView();
-
     toggleBtn.addEventListener('click', function () {
-        isListView = !isListView;
-        applyView();
+        if (currentView === 'card') {
+            currentView = 'list';
+            cardView.classList.add('hidden');
+            listView.classList.remove('hidden');
+            toggleBtn.textContent = 'Switch to Card View';
+        } else {
+            currentView = 'card';
+            cardView.classList.remove('hidden');
+            listView.classList.add('hidden');
+            toggleBtn.textContent = 'Switch to List View';
+        }
+        localStorage.setItem('assetView', currentView);
     });
 });

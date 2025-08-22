@@ -24,9 +24,7 @@
             <button type="submit" class="btn">Log Out</button>
         </form>
         {% else %}
-        <a href="{% url 'core:login' %}" class="btn">
-            <span>Log In</span>
-        </a>
+        <a href="{% url 'core:login' %}" class="btn button">Log In</a>
         {% endif %}
         <a href="https://em01.irrsupply.net/SOGo/" target="_blank" class="login-button">
             <div class="envelope-wrapper">
@@ -43,11 +41,6 @@
             <span class="email-label">Email</span>
         </a>
     </div>
-    <!--
-    <div class="title-container">
-        <h1 class="site-title">IrrNET</h1>
-    </div>
-    -->
 </header>
 {% is_current_url "/login/" as is_login %}
 {% if not is_login %}
@@ -70,6 +63,13 @@
         </nav>
     </aside>
     {% endif %}
+    {% if SHOW_ENV_BANNER %}
+    <div class="env-banner">
+        <div class="triangle"></div>
+        <div class="env-banner-text">DEV</div>
+    </div>
+    {% endif %}
+
     <main class="content">
         {% load breadcrumb_tags %}
         {% get_breadcrumbs as breadcrumbs %}

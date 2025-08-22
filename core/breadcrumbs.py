@@ -47,7 +47,10 @@ BREADCRUMB_MAP = {
     'folder-view': lambda request, context: [
         {'label': 'Home', 'url': reverse_lazy('core:home')},
         {'label': 'Documents', 'url': reverse_lazy('document-list')},
-        {'label': context.get('department').name, 'url': reverse_lazy('department-overview')},
+        *(
+            [{'label': context.get('department').name, 'url': reverse_lazy('department-overview')}]
+            if context.get('department').name != context.get('current_folder').name else []
+        ),
         *[
             {'label': ancestor.name, 'url': reverse_lazy('folder-view', args=[context['department'].slug, ancestor.id])}
             for ancestor in context.get('current_folder').get_ancestors()
@@ -74,7 +77,7 @@ BREADCRUMB_MAP = {
     'ticket_detail': lambda request, context: [
         {'label': 'Home', 'url': reverse_lazy('core:home')},
         {'label': 'Dashboard', 'url': reverse_lazy('dashboard')},
-        {'label': f"Ticket #{context.get('ticket').id}", 'url': ''},
+        {'label': f"(#{context.get('ticket').id}) - {context.get('ticket').title}", 'url': ''},
     ],
     'dashboard': [
         {'label': 'Home', 'url': reverse_lazy('core:home')},

@@ -15,23 +15,24 @@
     {% empty %}
     <p class="no-results">No matches found.</p>
     {% endfor %}
-
 </div>
 
+{% if page_obj.has_other_pages %}
 <div class="pagination">
     {% if page_obj.has_previous %}
-    <a href="?search={{ search }}&page={{ page_obj.previous_page_number }}">← Previous</a>
+    <a href="?search={{ search }}&page={{ page_obj.previous_page_number }}" class="pagination-link" data-section="directory-section">← Previous</a>
     {% endif %}
 
     {% for num in page_obj.paginator.page_range %}
     {% if page_obj.number == num %}
     <strong>{{ num }}</strong>
     {% else %}
-    <a href="?search={{ search }}&page={{ num }}">{{ num }}</a>
+    <a href="?search={{ search }}&page={{ num }}" class="pagination-link" data-section="directory-section">{{ num }}</a>
     {% endif %}
     {% endfor %}
 
     {% if page_obj.has_next %}
-    <a href="?search={{ search }}&page={{ page_obj.next_page_number }}">Next →</a>
+    <a href="?search={{ search }}&page={{ page_obj.next_page_number }}" class="pagination-link" data-section="directory-section">Next →</a>
     {% endif %}
 </div>
+{% endif %}

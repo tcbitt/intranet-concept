@@ -1,0 +1,50 @@
+<div id="listView" class="list-view">
+    <table class="asset-table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Assigned To/Branch #</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for asset in page_obj %}
+        <tr onclick="window.location.href='{% url 'asset-detail' asset.pk %}'">
+            <td>{{ asset.name }}</td>
+            <td>{{ asset.pk }}</td>
+            <td>
+                {% if asset.checked_out_to_user %}
+                {{ asset.checked_out_to_user.get_full_name|default:asset.checked_out_to_user.username }} - {{ asset.checked_out_to_user.userprofile.branch.location_number }}
+                {% elif asset.checked_out_to_branch %}
+                {{ asset.checked_out_to_branch.name }} - {{ asset.checked_out_to_branch.location_number }}
+                {% elif asset.location %}
+                {{ asset.location }}
+                {% else %}
+                Unassigned
+                {% endif %}
+            </td>
+            <td>{{ asset.status_type|default:"—" }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="pagination">
+    {% if page_obj.has_previous %}
+    <a href="?search={{ search }}&page={{ page_obj.previous_page_number }}" class="pagination-link" data-section="widget-results">← Previous</a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+    <strong>{{ num }}</strong>
+    {% else %}
+    <a href="?search={{ search }}&page={{ num }}" class="pagination-link" data-section="widget-results">{{ num }}</a>
+    {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <a href="?search={{ search }}&page={{ page_obj.next_page_number }}" class="pagination-link" data-section="widget-results">Next →</a>
+    {% endif %}
+</div>
+

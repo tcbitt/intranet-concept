@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Document, Folder, Department
+from .models import Document, Folder
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
@@ -13,8 +13,4 @@ class FolderAdmin(admin.ModelAdmin):
     list_filter = ('department',)
     search_fields = ('name',)
 
-@admin.register(Department)
-class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'manager')
-    search_fields = ('name', 'slug')
 

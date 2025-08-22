@@ -76,60 +76,43 @@ def ticket_detail(request, pk):
 
 
 def dashboard(request):
-    context = {}
-    archived_qs = None
+    user = request.user
+    context = {
+        'is_support': is_support(user),
+        'is_admin': is_admin(user),
+        'is_employee': is_employee(user),
+    }
 
-    if is_support(request.user) or is_admin(request.user):
-        context['my_tickets'] = Ticket.objects.filter(
-            assigned_to=request.user
-        ).exclude(status__in=['closed', 'resolved'])
+    if is_support(user) or is_admin(user):
+        context['my_tickets'] = Ticket.objects.filter(assigned_to=user).exclude(status__in=['closed', 'resolved'])
+        context['archived_my_tickets'] = Ticket.objects.filter(status__in=['closed', 'resolved'])
 
-        archived_qs = Ticket.objects.filter(
-            models.Q(assigned_to=request.user) | models.Q(created_by=request.user),
-            status__in=['closed', 'resolved']
-        ).distinct()
+        if is_support(user):
+            context['unassigned_tickets'] = Ticket.objects.filter(assigned_to__isnull=True, status='open')
 
-        context['unassigned_tickets'] = Ticket.objects.filter(
-            assigned_to__isnull=True,
-            status='open'
-        )
+        if is_admin(user):
+            context['all_tickets'] = Ticket.objects.exclude(status__in=['closed', 'resolved'])
+            context['archived_all_tickets'] = Ticket.objects.filter(status__in=['closed', 'resolved'])
+            context['user_management'] = True
 
+        status_map = dict(Ticket.STATUS_CHOICES)
         raw_counts = {
             'open': Ticket.objects.filter(status='open', assigned_to__isnull=True).count(),
             'in_progress': Ticket.objects.filter(status='in_progress').count(),
             'resolved': Ticket.objects.filter(status='resolved').count(),
             'closed': Ticket.objects.filter(status='closed').count(),
         }
-
-        status_map = dict(Ticket.STATUS_CHOICES)
-
         context['status_counts_display'] = [
-            {'code': code, 'label': status_map.get(code, code.title()), 'count': count}
-            for code, count in raw_counts.items()
+            {'code': code, 'label': status_map.get(code, code.title()), 'count': raw_counts.get(code, 0)}
+            for code in ['open', 'in_progress', 'resolved', 'closed']
         ]
 
-        if is_admin(request.user):
-            context['all_tickets'] = Ticket.objects.exclude(status__in=['closed', 'resolved'])
-            context['archived_all_tickets'] = Ticket.objects.filter(status__in=['closed', 'resolved'])
-            context['user_management'] = True
-
-    elif is_employee(request.user):
-        context['my_tickets'] = Ticket.objects.filter(
-            created_by=request.user
-        ).exclude(status__in=['closed', 'resolved'])
-
-        archived_qs = Ticket.objects.filter(
-            created_by=request.user,
-            status__in=['closed', 'resolved']
-        )
-
-    if archived_qs is not None:
-        paginator = Paginator(archived_qs.order_by('-updated_at'), 10)
-        page_number = request.GET.get('page')
-        archived_page = paginator.get_page(page_number)
-        context['archived_my_tickets'] = archived_page
+    elif is_employee(user):
+        context['my_tickets'] = Ticket.objects.filter(created_by=user).exclude(status__in=['closed', 'resolved'])
+        context['archived_my_tickets'] = Ticket.objects.filter(created_by=user, status__in=['closed', 'resolved'])
 
     return render(request, 'helpdesk/dashboard.html', context)
+
 
 def no_access(request):
     return render(request, 'core/no_access.html')

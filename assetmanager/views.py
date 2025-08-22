@@ -1,21 +1,65 @@
 from django.core.paginator import Paginator
 from django.db import models
+from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
+
 from accesscontrol.decorators import role_required
-from .models import Asset
-from .forms import AssetForm  # You’ll need to create this
+from .models import Asset, AssetType, ModelType, Status
+from .forms import AssetForm
+
 
 @role_required('Support')
 def asset_list(request):
+    search_query = request.GET.get('search', '')
+    asset_type_filter = request.GET.get('asset_type')
+    model_type_filter = request.GET.get('model_type')
+    status_type_filter = request.GET.get('status_type')
+
     assets = Asset.objects.select_related(
         'asset_type', 'model_type', 'checked_out_to_user', 'checked_out_to_branch'
     ).order_by('-updated_at')
+
+    if search_query:
+        assets = assets.filter(
+            Q(name__icontains=search_query) |
+            Q(model_type__name__icontains=search_query) |
+            Q(checked_out_to_user__username__icontains=search_query) |
+            Q(checked_out_to_user__first_name__icontains=search_query) |
+            Q(checked_out_to_user__last_name__icontains=search_query) |
+            Q(checked_out_to_branch__name__icontains=search_query)
+        )
+
+    if asset_type_filter:
+        assets = assets.filter(asset_type__id=asset_type_filter)
+
+    if model_type_filter:
+        assets = assets.filter(model_type__id=model_type_filter)
+
+    if status_type_filter:
+        assets = assets.filter(status_type__id=status_type_filter)
 
     paginator = Paginator(assets, 25)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'assetmanager/asset_list.html', {'assets': page_obj})
+    context = {
+        'page_obj': page_obj,
+        'search': search_query,
+        'asset_types': AssetType.objects.all(),
+        'model_types': ModelType.objects.all(),
+        'status_types': Status.objects.all(),
+        'selected_asset_type': asset_type_filter,
+        'selected_model_type': model_type_filter,
+        'selected_status_type': status_type_filter,
+    }
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string('assetmanager/_asset_results.html', context, request=request)
+        return JsonResponse({'html': html})
+
+    return render(request, 'assetmanager/asset_list.html', context)
 
 
 @role_required('Support')

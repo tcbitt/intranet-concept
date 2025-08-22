@@ -9,79 +9,48 @@
 {% block content %}
 <div class="widget">
     <div class="widget-header">
-        <h3>All Assets</h3>
-        <form method="get">
-            <input type="text" name="search" placeholder="Search assets..."/>
-        </form>
-        <div class="view-toggle">
-            <button type="button" id="toggleView" class="btn">Change View</button>
+        <h3 class="widget-title">All Assets</h3>
+
+        <div class="widget-actions">
+            <form method="get" class="search-form">
+                <input type="text" name="search" placeholder="Search assets..." value="{{ search }}"
+                       autocomplete="off"/>
+
+                <select name="asset_type">
+                    <option value="">All Types</option>
+                    {% for type in asset_types %}
+                    <option value="{{ type.id }}" {% if type.id|stringformat:"s" == selected_asset_type %}selected{% endif %}>{{ type.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="model_type">
+                    <option value="">All Models</option>
+                    {% for model in model_types %}
+                    <option value="{{ model.id }}" {% if model.id|stringformat:"s" == selected_model_type %}selected{% endif %}>{{ model.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="status_type">
+                    <option value="">All Statuses</option>
+                    {% for status in status_types %}
+                    <option value="{{ status.id }}" {% if status.id|stringformat:"s" == selected_status_type %}selected{% endif %}>{{ status.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit">Filter</button>
+            </form>
+            <a href="{% url 'asset-create' %}" class="btn create-btn" title="Create New Asset">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="icon" height="24" width="24">
+                    <path fill="white"
+                          d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z"/>
+                </svg>
+            </a>
         </div>
     </div>
 
-    {% if assets %}
-    <!-- Card View -->
-    <div id="cardView" class="card-view">
-        {% for asset in assets %}
-        <div class="widget-card">
-            <div class="card-header">
-                <strong>{{ asset.name }}</strong>
-                <span>ID: {{ asset.pk }}</span>
-            </div>
-            <div class="card-body">
-                {% if asset.checked_out_to_user %}
-                <p><strong>Checked Out To:</strong>
-                    {{ asset.checked_out_to_user.get_full_name|default:asset.checked_out_to_user.username }}</p>
-                {% elif asset.checked_out_to_branch %}
-                <p><strong>Checked Out To Branch:</strong> {{ asset.checked_out_to_branch.name }}</p>
-                {% elif asset.location %}
-                <p><strong>Location:</strong> {{ asset.location }}</p>
-                {% else %}
-                <p><strong>Location:</strong> Unassigned</p>
-                {% endif %}
-
-                {% if asset.status %}
-                <p><strong>Status:</strong> {{ asset.status }}</p>
-                {% endif %}
-                <a href="{% url 'asset-detail' asset.pk %}" class="btn">View Details</a>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    <!-- Table View -->
-    <div id="listView" class="list-view hidden">
-        <table class="asset-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>ID</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for asset in assets %}
-                <tr onclick="window.location.href='{% url 'asset-detail' asset.pk %}'">
-                    <td>{{ asset.name }}</td>
-                    <td>{{ asset.pk }}</td>
-                    <td>
-                        {% if asset.checked_out_to_user %}
-                        {{ asset.checked_out_to_user.get_full_name|default:asset.checked_out_to_user.username }}
-                        {% elif asset.checked_out_to_branch %}
-                        {{ asset.checked_out_to_branch.name }}
-                        {% elif asset.location %}
-                        {{ asset.location }}
-                        {% else %}
-                        Unassigned
-                        {% endif %}
-                    </td>
-                    <td>{{ asset.status|default:"—" }}</td>
-                    <td><a href="{% url 'asset-detail' asset.pk %}" class="btn">View</a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    {% if page_obj %}
+    <div id="widget-results">
+        {% include 'assetmanager/_asset_results.html' %}
     </div>
     {% else %}
     <p class="no-results">No assets found.</p>
@@ -90,5 +59,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/view-toggle.js' %}"></script>
+<script src="{% static 'js/directory-autosubmit.js' %}"></script>
+<script src="{% static 'js/pagination.js' %}"></script>
 {% endblock %}

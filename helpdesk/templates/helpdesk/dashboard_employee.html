@@ -1,0 +1,11 @@
+<div class="dashboard-block">
+    <h3>My Tickets</h3>
+    {% include "helpdesk/_ticket_table.html" with tickets=my_tickets show_comments=True %}
+</div>
+
+{% if archived_my_tickets %}
+<div class="dashboard-block">
+    <h3>Archived Tickets</h3>
+    {% include "helpdesk/_ticket_table.html" with tickets=archived_my_tickets show_comments=False %}
+</div>
+{% endif %}

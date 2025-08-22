@@ -226,12 +226,6 @@ body {
     flex: 1;
     padding: 2rem;
     background-color: var(--white);
-    width: calc(100% - 140px);
-    transition: width 0.3s ease;
-}
-
-.content.expanded {
-    width: calc(100% - 0px);
     transition: width 0.3s ease;
 }
 

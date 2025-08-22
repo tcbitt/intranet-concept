@@ -1,10 +1,41 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/widget.css' %}">
+<link rel="stylesheet" href="{% static 'css/assetmanager.css' %}">
+{% endblock %}
 
 {% block content %}
-<h1>{% if asset %}Edit{% else %}Create{% endif %} Asset</h1>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Save</button>
-</form>
+<div class="widget">
+    <div class="widget-header">
+        <h3 class="widget-title">Update Asset: {{ asset.name }}</h3>
+        <div class="widget-actions">
+            {% if asset %}
+            <a href="{% url 'asset-detail' asset.pk %}" class="toggle-btn">Cancel</a>
+            {% else %}
+            <a href="{% url 'asset-list' %}" class="toggle-btn">Cancel</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}"><strong>{{ field.label }}</strong></label>
+            {{ field }}
+            {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+            <div class="field-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <div class="widget-actions">
+            <button type="submit" class="create-btn">Save Changes</button>
+        </div>
+    </form>
+</div>
 {% endblock %}
